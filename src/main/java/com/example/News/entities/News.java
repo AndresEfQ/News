@@ -13,11 +13,13 @@ public class News {
     private String body;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+    private Boolean isActive;
 
-    public News(String title, String body, Date date) {
+    public News(String title, String body) {
         this.title = title;
         this.body = body;
-        this.date = date;
+        this.date = new Date();
+        this.isActive = true;
     }
 
     public News() {
@@ -55,6 +57,14 @@ public class News {
         this.date = date;
     }
 
+    public void setIsActive(Boolean isActive) {
+      this.isActive = isActive;
+    }
+
+    public Boolean getIsActive() {
+      return isActive;
+    }
+
     @Override
     public String toString() {
         return "{ " +
@@ -62,6 +72,7 @@ public class News {
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
                 ", date='" + date + '\'' +
+                ", is active='" + isActive + '\'' +
                 " }";
     }
 }

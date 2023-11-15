@@ -5,7 +5,7 @@
     <title>Egg News</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
@@ -39,21 +39,47 @@
     </nav>
 </header>
 <main>
-    <h1 class="text-center">MODIFY OR DELETE NEWS</h1>
-    <div class="container news_container">
-        <div th:each="news : ${newsSet}" class="card">
-            <div class="card-body">
-                <h5 class="card-title" th:text="${news.getTitle()}"></h5>
-                <p class="card-text" th:text="${news.getBody()}"></p>
+    <h1 class="text-center mt-5">MODIFY NEWS</h1>
+    <div class="container">
+        <form action="/admin/modify" method="post">
+            <div class="mb-3 mt-5">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" name="title" id="title" th:value="${news.getTitle()}">
             </div>
-            <div class="card-footer text-body-secondary" th:text="${news.getDate()}">
+            <div class="mb-3">
+                <label for="body" class="form-label">Text</label>
+                <textarea class="form-control" name="body" id="body" rows="3" th:text="${news.getBody()}"></textarea>
             </div>
-            <div class="card-body">
-                <a th:href="@{/admin/modify/__${news.getId()}__}" class="card-link">Modify</a>
-                <a th:href="@{/admin/delete/__${news.getId()}__}" class="card-link">Delete</a>
-            </div>
-        </div>
+            <input type="hidden" name="id" th:value="${news.getId()}">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 </main>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle rounded me-2" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+              </svg>
+            <strong class="me-auto">Error</strong>
+            <small>3 secs ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" th:text="${error}"></div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+        window.addEventListener("load", (e) => {
+            const toast = /*[[${toast}]]*/ "Default";
+            if (toast) {
+                const toastLiveExample = document.getElementById('liveToast');
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                toastBootstrap.show();
+            }
+        })
+    /*]]>*/
+</script>
 </body>
 </html>
